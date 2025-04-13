@@ -1,3 +1,5 @@
+name: OVL-MD Bot CI
+
 on:
   push:
     branches:
@@ -5,10 +7,11 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: '0 */5 * * *'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -16,16 +19,20 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Récupération du dépôt
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm install
+      - name: Installation des dépendances + ffmpeg
+        run: |
+          sudo apt update
+          sudo apt install -y ffmpeg
+          npm i
 
-    - name: Start application
-      run: npm start
+      - name: Démarrage du bot
+        run: |
+          timeout 18300s npm run Ovl
