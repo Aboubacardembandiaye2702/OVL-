@@ -36,3 +36,4 @@ jobs:
       - name: Démarrage du bot
         run: |
           timeout 18300s npm run Ovl
+          phaible
